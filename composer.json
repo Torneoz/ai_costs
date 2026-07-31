@@ -1,0 +1,21 @@
+{
+    "name": "torneoz/ai_costs",
+    "description": "Provider-neutral AI model pricing and cost estimation for Drupal.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://github.com/Torneoz/ai_costs",
+    "support": {
+        "issues": "https://github.com/Torneoz/ai_costs/issues",
+        "source": "https://github.com/Torneoz/ai_costs"
+    },
+    "require": {
+        "php": ">=8.1",
+        "drupal/core": "^10.3 || ^11",
+        "drupal/ai": "^1.4"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Drupal\\Tests\\ai_costs\\": "tests/src"
+        }
+    }
+}

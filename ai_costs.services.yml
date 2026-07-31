@@ -1,0 +1,4 @@
+services:
+  ai_costs.pricing_catalog:
+    class: Drupal\ai_costs\Service\AiPricingCatalog
+    arguments: ['@config.factory', '@extension.path.resolver']

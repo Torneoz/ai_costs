@@ -1,0 +1,7 @@
+ai_costs.settings:
+  path: '/admin/config/ai/costs'
+  defaults:
+    _form: '\Drupal\ai_costs\Form\AiCostsSettingsForm'
+    _title: 'AI Costs'
+  requirements:
+    _permission: 'administer ai costs'

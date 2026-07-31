@@ -1,0 +1,66 @@
+ai_costs.settings:
+  type: config_object
+  label: 'AI Costs settings'
+  mapping:
+    model_pricing:
+      type: sequence
+      label: 'Model pricing'
+      sequence:
+        type: mapping
+        mapping:
+          provider:
+            type: string
+          model:
+            type: string
+          aliases:
+            type: sequence
+            sequence:
+              type: string
+          type:
+            type: string
+          operation:
+            type: string
+          currency:
+            type: string
+          input_per_million:
+            type: float
+          cached_input_per_million:
+            type: float
+          cache_write_5m_per_million:
+            type: float
+          cache_write_1h_per_million:
+            type: float
+          output_per_million:
+            type: float
+          long_context_threshold:
+            type: integer
+          long_input_per_million:
+            type: float
+          long_cached_input_per_million:
+            type: float
+          long_output_per_million:
+            type: float
+          input_per_image:
+            type: float
+          output_per_image_1k:
+            type: float
+          output_per_image_2k:
+            type: float
+          output_per_second_480p:
+            type: float
+          output_per_second_720p:
+            type: float
+          output_per_second_1080p:
+            type: float
+          per_hour:
+            type: float
+          per_million_characters:
+            type: float
+          source:
+            type: string
+          checked_at:
+            type: string
+          effective_from:
+            type: string
+          effective_until:
+            type: string

@@ -1,0 +1,9 @@
+name: AI Costs
+description: Provides shared AI model pricing data and provider-neutral cost estimates.
+package: AI
+type: module
+core_version_requirement: ^10.3 || ^11
+configure: ai_costs.settings
+
+dependencies:
+  - ai:ai

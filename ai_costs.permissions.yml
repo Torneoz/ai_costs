@@ -1,0 +1,4 @@
+administer ai costs:
+  title: 'Administer AI costs'
+  description: 'Edit shared AI model pricing data.'
+  restrict access: true

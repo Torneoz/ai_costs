@@ -1,0 +1,5 @@
+ai_costs.settings:
+  title: 'AI Costs'
+  description: 'Configure shared AI model pricing and cost estimates.'
+  route_name: ai_costs.settings
+  parent: ai.admin_config_infrastructure
