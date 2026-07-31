@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-alpha2
+
+- Corrected the Composer package name for Drupal.org.
+- Made effective-date price selection deterministic.
+- Preserved operation-specific token prices during estimation.
+- Added date-range validation and broader automated test coverage.
+- Added coding standards and PHPUnit checks to continuous integration.
+
 ## 1.0.0-alpha1
 
 - Added a provider-neutral AI pricing catalogue service.

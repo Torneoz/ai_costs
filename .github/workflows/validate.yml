@@ -13,8 +13,14 @@ jobs:
         with:
           php-version: '8.1'
       - name: Validate Composer metadata
-        run: composer validate --no-check-publish --no-interaction
+        run: composer validate --strict --no-check-publish --no-interaction
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
       - name: Lint PHP
         run: find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
       - name: Validate packaged pricing
         run: php -r 'json_decode(file_get_contents("data/pricing.json"), true, 512, JSON_THROW_ON_ERROR);'
+      - name: Check Drupal coding standards
+        run: composer phpcs
+      - name: Run unit tests
+        run: composer phpunit

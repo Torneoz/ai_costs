@@ -95,6 +95,13 @@ final class AiPricingCatalog {
     if ($row === NULL || ($row['type'] ?? '') !== 'tokens') {
       return NULL;
     }
+    return $this->estimateTokenRow($row, $usage);
+  }
+
+  /**
+   * Estimates token usage using a resolved pricing row.
+   */
+  private function estimateTokenRow(array $row, array $usage): float {
     $input = max(0, (int) ($usage['input_tokens'] ?? $usage['input'] ?? 0));
     $output = max(0, (int) ($usage['output_tokens'] ?? $usage['output'] ?? 0));
     $cached = min($input, max(0, (int) ($usage['cached_input_tokens'] ?? $usage['cached'] ?? 0)));
@@ -145,7 +152,7 @@ final class AiPricingCatalog {
       return NULL;
     }
     return match ($row['type'] ?? '') {
-      'tokens' => $this->estimateTokens($provider, $model, $tokens),
+      'tokens' => $this->estimateTokenRow($row, $tokens),
       'image' => $this->estimateImage($row, $operation, $configuration),
       'video' => $this->estimateVideo($row, $operation, $configuration, $metadata),
       'characters' => $this->estimateCharacters($row, $input),
@@ -164,6 +171,7 @@ final class AiPricingCatalog {
       default => strtolower(trim($provider)),
     };
     $date ??= gmdate('Y-m-d');
+    $exact = NULL;
     $wildcard = NULL;
     foreach ($this->getPricing() as $row) {
       $rowOperation = trim((string) ($row['operation'] ?? ''));
@@ -183,14 +191,34 @@ final class AiPricingCatalog {
       if (($row['effective_until'] ?? '') !== '' && $date > $row['effective_until']) {
         continue;
       }
-      if (in_array($model, $models, TRUE)) {
-        return $row;
+      $isExact = in_array($model, $models, TRUE);
+      $isWildcard = ($row['model'] ?? '') === '*';
+      if (!$isExact && !$isWildcard) {
+        continue;
       }
-      if (($row['model'] ?? '') === '*') {
-        $wildcard = $row;
+      $candidate = $isExact ? $exact : $wildcard;
+      if ($candidate === NULL || $this->isPreferredRow($row, $candidate, $operation)) {
+        if ($isExact) {
+          $exact = $row;
+        }
+        else {
+          $wildcard = $row;
+        }
       }
     }
-    return $wildcard;
+    return $exact ?? $wildcard;
+  }
+
+  /**
+   * Determines whether a matching row is preferred over the current match.
+   */
+  private function isPreferredRow(array $row, array $current, ?string $operation): bool {
+    $rowOperation = trim((string) ($row['operation'] ?? ''));
+    $currentOperation = trim((string) ($current['operation'] ?? ''));
+    if ($operation !== NULL && ($rowOperation !== '') !== ($currentOperation !== '')) {
+      return $rowOperation !== '';
+    }
+    return (string) ($row['effective_from'] ?? '') > (string) ($current['effective_from'] ?? '');
   }
 
   /**
@@ -270,13 +298,27 @@ final class AiPricingCatalog {
         }
       }
       foreach (['effective_from', 'effective_until', 'checked_at'] as $field) {
-        if (isset($row[$field]) && !preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $row[$field])) {
+        if (isset($row[$field]) && !$this->isValidDate((string) $row[$field])) {
           throw new \UnexpectedValueException(sprintf('Pricing row %d has an invalid %s date.', $index + 1, $field));
         }
+      }
+      if (
+        isset($row['effective_from'], $row['effective_until'])
+        && $row['effective_until'] < $row['effective_from']
+      ) {
+        throw new \UnexpectedValueException(sprintf('Pricing row %d has an invalid effective date range.', $index + 1));
       }
     }
     unset($row);
     return array_values($rows);
+  }
+
+  /**
+   * Checks that a date is a real calendar date in YYYY-MM-DD format.
+   */
+  private function isValidDate(string $date): bool {
+    $value = \DateTimeImmutable::createFromFormat('!Y-m-d', $date);
+    return $value !== FALSE && $value->format('Y-m-d') === $date;
   }
 
 }

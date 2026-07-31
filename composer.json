@@ -1,5 +1,5 @@
 {
-    "name": "torneoz/ai_costs",
+    "name": "drupal/ai_costs",
     "description": "Provider-neutral AI model pricing and cost estimation for Drupal.",
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
@@ -7,6 +7,22 @@
     "support": {
         "issues": "https://github.com/Torneoz/ai_costs/issues",
         "source": "https://github.com/Torneoz/ai_costs"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": false,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "symfony/runtime": true,
+            "tbachert/spi": true
+        }
     },
     "require": {
         "php": ">=8.1",
@@ -17,5 +33,17 @@
         "psr-4": {
             "Drupal\\Tests\\ai_costs\\": "tests/src"
         }
+    },
+    "require-dev": {
+        "drupal/coder": "^8.3",
+        "drupal/core-dev": "^10.3 || ^11"
+    },
+    "scripts": {
+        "check": [
+            "@phpcs",
+            "@phpunit"
+        ],
+        "phpcs": "phpcs --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme src tests",
+        "phpunit": "phpunit --bootstrap tests/bootstrap.php tests/src/Unit"
     }
 }

@@ -17,20 +17,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class AiCostsSettingsForm extends ConfigFormBase {
 
   /**
-   * The pricing catalogue.
-   */
-  private ?AiPricingCatalog $pricingCatalog = NULL;
-
-  /**
    * Constructs the settings form.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     TypedConfigManagerInterface $typedConfigManager,
-    AiPricingCatalog $pricingCatalog,
+    private readonly AiPricingCatalog $pricingCatalog,
   ) {
     parent::__construct($configFactory, $typedConfigManager);
-    $this->pricingCatalog = $pricingCatalog;
   }
 
   /**
@@ -62,7 +56,7 @@ final class AiCostsSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $pricing = $this->getPricingCatalog()->getPricing();
+    $pricing = $this->pricingCatalog->getPricing();
     $counts = array_count_values(array_map(
       static fn(array $row): string => (string) ($row['provider'] ?? 'unknown'),
       $pricing,
@@ -101,7 +95,7 @@ final class AiCostsSettingsForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     try {
-      $normalized = $this->getPricingCatalog()->normalizeJson(
+      $normalized = $this->pricingCatalog->normalizeJson(
         (string) $form_state->getValue('model_pricing'),
       );
       $form_state->setValue('model_pricing', $normalized);
@@ -138,16 +132,6 @@ final class AiCostsSettingsForm extends ConfigFormBase {
       ->save();
     $this->messenger()->addStatus($this->t('Packaged AI pricing restored.'));
     $form_state->setRedirect('ai_costs.settings');
-  }
-
-  /**
-   * Gets the catalogue after normal or cached form reconstruction.
-   */
-  private function getPricingCatalog(): AiPricingCatalog {
-    if (!$this->pricingCatalog instanceof AiPricingCatalog) {
-      $this->pricingCatalog = \Drupal::service('ai_costs.pricing_catalog');
-    }
-    return $this->pricingCatalog;
   }
 
 }
