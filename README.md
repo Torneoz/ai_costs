@@ -20,6 +20,12 @@ Install and enable the module, then visit:
 
 The packaged schedule is used until an administrator saves an override.
 **Restore packaged pricing** removes the override.
+**Load latest maintained pricing** downloads and validates the current
+module-maintained schedule for review; it does not scrape provider websites or
+activate changes until the form is saved.
+
+The design for a separate, auditable official-provider ingestion pipeline is
+documented in `docs/provider-pricing-retrieval.md`.
 
 ## Service usage
 

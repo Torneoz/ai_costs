@@ -64,3 +64,12 @@ ai_costs.settings:
             type: string
           effective_until:
             type: string
+    pricing_source:
+      type: string
+      label: 'Pricing source'
+    pricing_checked_at:
+      type: string
+      label: 'Pricing retrieval or review time'
+    pricing_hash:
+      type: string
+      label: 'Pricing SHA-256 hash'

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added a safe preview-before-save updater for the maintained pricing schedule.
+- Added a provider-adapter plan for auditable retrieval from official pricing
+  sources.
+
 ## 1.0.0-alpha2
 
 - Corrected the Composer package name for Drupal.org.

@@ -2,3 +2,7 @@ services:
   ai_costs.pricing_catalog:
     class: Drupal\ai_costs\Service\AiPricingCatalog
     arguments: ['@config.factory', '@extension.path.resolver']
+
+  ai_costs.pricing_schedule_fetcher:
+    class: Drupal\ai_costs\Service\PricingScheduleFetcher
+    arguments: ['@http_client', '@ai_costs.pricing_catalog']
