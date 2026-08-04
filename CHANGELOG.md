@@ -2,9 +2,12 @@
 
 ## Unreleased
 
+## 1.0.0-alpha3
+
 - Added a safe preview-before-save updater for the maintained pricing schedule.
 - Added a provider-adapter plan for auditable retrieval from official pricing
   sources.
+- Added packaged Google Gemini Flash, Flash-Lite, and Pro pricing rows.
 
 ## 1.0.0-alpha2
 
